@@ -28,14 +28,15 @@ def get_model():
 
 
 def find_answer(context,question):
-  enc=tokenizer(question,context,padding='max_length',max_length=512,truncation=True)
-  k = np.array([enc['input_ids']])
-  k1 = np.array([enc['attention_mask']])
-  # k2 = np.array([enc['token_type_ids']])
-  res=m([k,k1])
-  start=np.argmax(res[0].numpy()[0])
-  end=np.argmax(res[1].numpy()[0])
-  return tokenizer.decode(k[0][start:end+1])
+    m=get_model()
+    enc=tokenizer(question,context,padding='max_length',max_length=512,truncation=True)
+    k = np.array([enc['input_ids']])
+    k1 = np.array([enc['attention_mask']])
+    # k2 = np.array([enc['token_type_ids']])
+    res=m([k,k1])
+    start=np.argmax(res[0].numpy()[0])
+    end=np.argmax(res[1].numpy()[0])
+    return tokenizer.decode(k[0][start:end+1])
 
 st.title("Question And Answering WebApp!")
 st.subheader("Example Context:")
