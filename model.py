@@ -3,8 +3,8 @@ import tensorflow
 from tensorflow.keras.layers import Input,Dense,Flatten,Activation
 from tensorflow.keras.models import Model
 from transformers import TFBertModel, TFAutoModelForQuestionAnswering
-from transformers import BertTokenizerFast
-tokenizer = BertTokenizerFast.from_pretrained('bert-large-uncased-whole-word-masking-finetuned-squad')
+from transformers import AutoTokenizer
+tokenizer = AutoTokenizer.from_pretrained('distilbert-base-cased-distilled-squad')
 import numpy as np
 
 
@@ -23,20 +23,19 @@ def get_model():
     # s2=Activation(tensorflow.keras.activations.softmax)(s2)
     # m=Model(inputs=[inp1,inp2,inp3],outputs=[s1,s2])
     # m.load_weights('Question Answering Model/model_weights')
-    m = TFAutoModelForQuestionAnswering.from_pretrained('bert-large-uncased-whole-word-masking-finetuned-squad')
+    m = TFAutoModelForQuestionAnswering.from_pretrained('distilbert-base-cased-distilled-squad')
     return m
 
 
 def find_answer(context,question):
-    m=get_model()
-    enc=tokenizer(question,context,padding='max_length',max_length=512,truncation=True)
-    k = np.array([enc['input_ids']])
-    k1 = np.array([enc['attention_mask']])
-    k2 = np.array([enc['token_type_ids']])
-    res=m([k,k1,k2])
-    start=np.argmax(res[0].numpy()[0])
-    end=np.argmax(res[1].numpy()[0])
-    return tokenizer.decode(k[0][start:end+1])
+  enc=tokenizer(question,context,padding='max_length',max_length=512,truncation=True)
+  k = np.array([enc['input_ids']])
+  k1 = np.array([enc['attention_mask']])
+  # k2 = np.array([enc['token_type_ids']])
+  res=m([k,k1])
+  start=np.argmax(res[0].numpy()[0])
+  end=np.argmax(res[1].numpy()[0])
+  return tokenizer.decode(k[0][start:end+1])
 
 st.title("Question And Answering WebApp!")
 st.subheader("Example Context:")
