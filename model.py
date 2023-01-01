@@ -4,7 +4,7 @@ from tensorflow.keras.layers import Input,Dense,Flatten,Activation
 from tensorflow.keras.models import Model
 from transformers import TFBertModel, TFAutoModelForQuestionAnswering
 from transformers import BertTokenizerFast
-tokenizer = BertTokenizerFast.from_pretrained('bert-large-uncased-whole-word-masking-finetuned-squad)
+tokenizer = BertTokenizerFast.from_pretrained('bert-large-uncased-whole-word-masking-finetuned-squad')
 import numpy as np
 
 
